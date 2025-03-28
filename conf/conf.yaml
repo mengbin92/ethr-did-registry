@@ -1,0 +1,26 @@
+version: "3.9"
+
+eth:
+  endpoint: http://192.168.1.200:8545
+  ws: ws://192.168.1.200:8546
+  network: 242958543
+  contract: 0x6e881828f60B1808a1AB6FcA20096c8825E39108
+
+
+keystore:
+  path: ./keystore/UTC--2024-10-12T01-48-28.438834749Z--086afb25e849aabeb24e8340e7807d5cc944b501
+  password: password
+
+server:
+  port: 18080
+  mode: debug
+
+log:
+  # 支持debug(-1)、info(0)、warn(1)、error(2)、dpanic(3)、panic(4)、fatal(5)
+  level: 0
+  # 日志输出格式，支持json or console
+  format: console
+
+database:
+    driver: mysql
+    source: root:Hvrg(CPVYUf^V+Qv@tcp(127.0.0.1:3306)/did?charset=utf8mb4&parseTime=True&loc=Local
