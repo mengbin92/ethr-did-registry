@@ -1,7 +1,7 @@
 package main
 
-import "github.com/mengbin92/ethr-did-registry/cmd"
+import "github.com/mengbin92/did/cmd"
 
-func main(){
+func main() {
 	cmd.Execute()
 }

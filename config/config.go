@@ -1,4 +1,4 @@
-package conf
+package config
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func LoadConfig() {
-	viper.SetConfigFile("./conf/conf.yaml")
+	viper.SetConfigFile("./config/config.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Sprintf("load config error: %s", err.Error()))

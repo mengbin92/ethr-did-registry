@@ -5,22 +5,22 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mengbin92/ethr-did-registry/db/mysql"
-	"github.com/mengbin92/ethr-did-registry/db/postgres"
-	"github.com/mengbin92/ethr-did-registry/db/sqlite3"
+	"github.com/mengbin92/did/lib/db/mysql"
+	"github.com/mengbin92/did/lib/db/postgres"
+	"github.com/mengbin92/did/lib/db/sqlite3"
 	"gorm.io/gorm"
 )
 
 var (
-	gdb      *gorm.DB
-	initOnce sync.Once
+	gdb        *gorm.DB
+	initDBOnce sync.Once
 )
 
 // Init inits the database connection only once
 func Init(driver, source string) error {
 	var err error
 
-	initOnce.Do(func() {
+	initDBOnce.Do(func() {
 		if driver == "postgre" {
 			gdb, err = postgres.InitDB(source)
 		} else if driver == "sqlite" {
