@@ -19,3 +19,12 @@ redis:
     write_timeout: 10
     dial_timeout: 10
     db: 0
+
+blockchain:
+    endpoint: http://localhost:32770
+    # chain_id: 5858586
+    registry_contract_address: 0x303e3253d30044c87032e6bd723f4a4d060477a0
+
+keystore:
+    path: ./keystore/UTC--2024-09-20T02-58-36.049005348Z--5ee5de0cddbee39235624ea1a4ade7cda94829c9
+    password: password

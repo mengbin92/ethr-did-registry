@@ -6,8 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/gin-gonic/gin"
+	"github.com/mengbin92/did/component/routers"
 	"github.com/mengbin92/did/config"
 	"github.com/mengbin92/did/lib/db"
 	"github.com/mengbin92/did/lib/logger"
@@ -26,11 +28,20 @@ func Execute() {
 }
 
 func run() {
-	if err := setEngine(loadDB()).Run(fmt.Sprintf(":%d", viper.GetInt("server.port"))); err != nil {
+	if err := setEngine(loadDB(),loadETH()).Run(fmt.Sprintf(":%d", viper.GetInt("server.port"))); err != nil {
 		log.Error("Failed to run server: ", err)
 		panic(err)
 	}
 
+}
+
+func loadETH() *ethclient.Client {
+	eth, err := ethclient.Dial(viper.GetString("blockchain.endpoint"))
+	if err != nil {
+		log.Error("Failed to connect to ethereum: ", err)
+		panic(err)
+	}
+	return eth
 }
 
 func loadDB() *gorm.DB {
@@ -42,7 +53,7 @@ func loadDB() *gorm.DB {
 	return db.Get()
 }
 
-func setEngine(db *gorm.DB) *gin.Engine {
+func setEngine(db *gorm.DB,client *ethclient.Client) *gin.Engine {
 	gin.SetMode(viper.GetString("server.mode"))
 	r := gin.New()
 
@@ -61,6 +72,7 @@ func setEngine(db *gorm.DB) *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(middleware.SetLoggerMiddleware(logger.DefaultLogger(viper.GetInt("log.level"), viper.GetString("log.format"))))
 	r.Use(middleware.SetDBMiddleware(db))
+	r.Use(middleware.SetETHMiddleware(client))
 	r.Use(middleware.SetLogMiddleware(logger.DefaultLogger(viper.GetInt("log.level"), viper.GetString("log.format"))))
 
 	//设置路由
@@ -69,6 +81,8 @@ func setEngine(db *gorm.DB) *gin.Engine {
 			"message": "pong",
 		})
 	})
+
+	routers.SetBasicRouters(r)
 
 	return r
 }
